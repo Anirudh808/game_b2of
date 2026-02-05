@@ -94,7 +94,7 @@ export function SpinningWheel({ segments, onSpinEnd }: SpinningWheelProps) {
     <div className="flex flex-col items-center gap-8">
       <div className="relative">
         {/* Arrow pointer at top */}
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-10">
           <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
             <polygon
               points="20,35 8,10 32,10"
@@ -108,7 +108,7 @@ export function SpinningWheel({ segments, onSpinEnd }: SpinningWheelProps) {
         {/* Wheel */}
         <svg
           viewBox="0 0 520 520"
-          className="h-[600px] w-[600px] drop-shadow-2xl select-none"
+          className="h-[540px] w-[540px] drop-shadow-2xl select-none"
           role="img"
           aria-label="Spinning wheel"
         >
@@ -205,7 +205,7 @@ export function SpinningWheel({ segments, onSpinEnd }: SpinningWheelProps) {
       <button
         onClick={spin}
         disabled={isSpinning || segments.length === 0}
-        className="px-12 py-6 text-3xl font-bold text-white bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full shadow-lg hover:from-emerald-400 hover:to-emerald-500 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 min-w-[280px] touch-manipulation -mt-12 ml-4"
+        className="px-8 py-4 text-3xl font-bold text-white bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full shadow-lg hover:from-emerald-400 hover:to-emerald-500 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 min-w-[280px] touch-manipulation -mt-12 ml-4"
       >
         {isSpinning ? "Spinning..." : "Spin the Wheel!"}
       </button>

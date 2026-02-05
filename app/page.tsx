@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { SpinningWheel } from "@/components/game/spinning-wheel"
-import { ParentButton, ParentModal } from "@/components/game/parent-modal"
-import { getWheelSegments } from "@/lib/puzzles"
-import type { WheelSegment } from "@/lib/types"
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SpinningWheel } from "@/components/game/spinning-wheel";
+import { ParentButton, ParentModal } from "@/components/game/parent-modal";
+import { getWheelSegments } from "@/lib/puzzles";
+import type { WheelSegment } from "@/lib/types";
 
 export default function HomePage() {
-  const router = useRouter()
-  const [showParentModal, setShowParentModal] = useState(false)
-  const segments = getWheelSegments()
+  const router = useRouter();
+  const [showParentModal, setShowParentModal] = useState(false);
+  const segments = getWheelSegments();
 
   const handleSpinEnd = (segment: WheelSegment) => {
     // Small delay before navigation for better UX
     setTimeout(() => {
-      router.push(`/puzzle/${segment.id}`)
-    }, 800)
-  }
+      router.push(`/puzzle/${segment.id}`);
+    }, 800);
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-sky-100 via-sky-50 to-white flex flex-col items-center justify-center p-6">
       {/* Title */}
       <div className="text-center mb-8">
-        <h1 className="text-5xl md:text-6xl font-bold text-slate-800 mb-2 text-balance">
+        <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-2 text-balance">
           Robot Puzzle Adventure
         </h1>
         <p className="text-xl md:text-2xl text-slate-600">
@@ -32,7 +32,7 @@ export default function HomePage() {
       </div>
 
       {/* Robot mascot */}
-      <div className="text-8xl mb-6 animate-bounce">
+      <div className="text-8xl mb-4 animate-bounce">
         <span role="img" aria-label="Robot">
           🤖
         </span>
@@ -50,5 +50,5 @@ export default function HomePage() {
         onClose={() => setShowParentModal(false)}
       />
     </main>
-  )
+  );
 }
