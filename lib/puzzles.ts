@@ -134,10 +134,12 @@ export const puzzles: Puzzle[] = [
     start: { x: 0, y: 0, dir: "E" },
     goal: { x: 5, y: 0 },
     obstacles: [
-      { x: 2, y: 0, type: "wall" },
+      { x: 2, y: 0, type: "water" },
       { x: 2, y: 1, type: "wall" },
-      { x: 4, y: 1, type: "wall" },
+      { x: 4, y: 0, type: "wall" },
+      { x: 4, y: 1, type: "rock" },
       { x: 4, y: 2, type: "wall" },
+      { x: 3, y: 3, type: "water" },
     ],
     collectibles: [
       { x: 1, y: 2, type: "star" },
@@ -173,6 +175,11 @@ export const puzzles: Puzzle[] = [
       { x: 4, y: 4, type: "wall" },
       { x: 3, y: 4, type: "wall" },
       { x: 2, y: 4, type: "wall" },
+
+      { x: 5, y: 0, type: "rock" },
+      { x: 6, y: 5, type: "water" },
+      { x: 1, y: 6, type: "water" },
+      { x: 0, y: 4, type: "rock" },
     ],
     collectibles: [
       { x: 6, y: 0, type: "star" },
@@ -238,7 +245,6 @@ export const puzzles: Puzzle[] = [
     goal: { x: 6, y: 6 },
     obstacles: [
       { x: 1, y: 0, type: "rock" },
-      { x: 2, y: 1, type: "water" },
       { x: 0, y: 2, type: "wall" },
       { x: 3, y: 2, type: "rock" },
       { x: 4, y: 1, type: "water" },
@@ -296,7 +302,10 @@ export const puzzles: Puzzle[] = [
       { x: 3, y: 6, type: "wall" },
       { x: 4, y: 6, type: "wall" },
       { x: 5, y: 6, type: "wall" },
-      { x: 6, y: 6, type: "wall" },
+
+      { x: 0, y: 1, type: "water" },
+      { x: 6, y: 0, type: "rock" },
+      { x: 7, y: 6, type: "rock" },
     ],
     collectibles: [
       { x: 7, y: 1, type: "star" },
@@ -433,10 +442,8 @@ export const puzzles: Puzzle[] = [
       { x: 5, y: 7, type: "wall" },
       { x: 4, y: 8, type: "wall" },
       // Inner obstacles
-      { x: 4, y: 3, type: "water" },
       { x: 3, y: 4, type: "water" },
       { x: 5, y: 4, type: "water" },
-      { x: 4, y: 5, type: "water" },
     ],
     collectibles: [
       { x: 4, y: 1, type: "star" },
@@ -459,50 +466,41 @@ export const puzzles: Puzzle[] = [
     id: "expert-4",
     title: "Ultimate Quest",
     difficulty: "hard",
-    shortKidHint: "The final challenge awaits!",
-    gridSize: { rows: 9, cols: 9 },
+    shortKidHint: "Collect all stars, then reach the flag!",
+    gridSize: { rows: 7, cols: 7 },
     start: { x: 0, y: 0, dir: "S" },
-    goal: { x: 8, y: 8 },
+    goal: { x: 6, y: 6 },
+
+    // Distributed obstacles (not a single cluster), but still leaves a clear solvable path
     obstacles: [
-      // Scattered obstacles creating a complex maze
       { x: 2, y: 0, type: "rock" },
-      { x: 1, y: 1, type: "water" },
-      { x: 3, y: 1, type: "wall" },
-      { x: 5, y: 0, type: "water" },
-      { x: 6, y: 1, type: "rock" },
-      { x: 0, y: 2, type: "wall" },
-      { x: 2, y: 2, type: "water" },
-      { x: 4, y: 2, type: "rock" },
-      { x: 7, y: 2, type: "wall" },
-      { x: 1, y: 3, type: "rock" },
-      { x: 3, y: 3, type: "wall" },
+      { x: 4, y: 0, type: "water" },
+
+      { x: 1, y: 1, type: "wall" },
+      { x: 5, y: 1, type: "rock" },
+
+      { x: 3, y: 2, type: "water" },
+
+      { x: 0, y: 3, type: "rock" },
+      { x: 2, y: 3, type: "wall" },
       { x: 5, y: 3, type: "water" },
-      { x: 8, y: 3, type: "rock" },
-      { x: 2, y: 4, type: "wall" },
-      { x: 4, y: 4, type: "water" },
-      { x: 6, y: 4, type: "wall" },
-      { x: 0, y: 5, type: "rock" },
-      { x: 3, y: 5, type: "water" },
-      { x: 5, y: 5, type: "rock" },
-      { x: 7, y: 5, type: "water" },
-      { x: 1, y: 6, type: "wall" },
-      { x: 4, y: 6, type: "rock" },
-      { x: 6, y: 6, type: "water" },
-      { x: 8, y: 6, type: "wall" },
-      { x: 2, y: 7, type: "water" },
-      { x: 5, y: 7, type: "wall" },
-      { x: 7, y: 7, type: "rock" },
-      { x: 3, y: 8, type: "rock" },
-      { x: 6, y: 8, type: "water" },
+
+      { x: 1, y: 4, type: "water" },
+      { x: 4, y: 4, type: "rock" },
+
+      { x: 4, y: 5, type: "wall" },
+      { x: 3, y: 6, type: "water" },
     ],
+
+    // Stars placed on easy-to-reach lanes + tiny detours
     collectibles: [
-      { x: 4, y: 0, type: "star" },
-      { x: 8, y: 0, type: "star" },
-      { x: 0, y: 4, type: "star" },
-      { x: 8, y: 4, type: "star" },
-      { x: 0, y: 8, type: "star" },
-      { x: 4, y: 8, type: "star" },
+      { x: 0, y: 2, type: "star" }, // straight down early
+      { x: 1, y: 5, type: "star" }, // near bottom-left
+      { x: 3, y: 0, type: "star" }, // top lane (but avoid (2,0))
+      { x: 6, y: 1, type: "star" }, // right-top
+      { x: 6, y: 4, type: "star" }, // right-middle
     ],
+
     allowedCommands: [
       "MOVE",
       "TURN_LEFT",

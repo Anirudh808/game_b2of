@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import type { Command } from "@/lib/types"
+import type { Command } from "@/lib/types";
+import { CommandInfoHover } from "./CommandInfoHover";
 
 interface BlockTrayProps {
-  allowedCommands: Command[]
-  onAddCommand: (command: Command) => void
-  disabled?: boolean
+  allowedCommands: Command[];
+  onAddCommand: (command: Command) => void;
+  disabled?: boolean;
 }
 
 const COMMAND_CONFIG: Record<
@@ -42,7 +43,7 @@ const COMMAND_CONFIG: Record<
     icon: "🔁",
     color: "bg-pink-500 hover:bg-pink-400 active:bg-pink-600",
   },
-}
+};
 
 export function BlockTray({
   allowedCommands,
@@ -50,37 +51,47 @@ export function BlockTray({
   disabled,
 }: BlockTrayProps) {
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-lg">
-      <h3 className="text-lg font-bold text-slate-700 mb-3 text-center">
-        Commands
-      </h3>
-      <div className="flex flex-wrap gap-2 justify-center">
+    <div className="rounded-2xl bg-white p-4 shadow-lg">
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="text-lg font-bold text-slate-700">Commands</h3>
+        <div className="text-xs text-slate-500">Hover (i) to learn</div>
+      </div>
+
+      {/* Grid keeps everything aligned and consistent */}
+      <div className="grid grid-cols-3 gap-3">
         {allowedCommands.map((command) => {
-          const config = COMMAND_CONFIG[command]
+          const config = COMMAND_CONFIG[command];
+
           return (
-            <button
-              key={command}
-              onClick={() => onAddCommand(command)}
-              disabled={disabled}
-              className={`
-                ${config.color}
-                px-4 py-3 rounded-xl
-                text-white font-bold text-lg
-                shadow-md transition-all
-                active:scale-95 touch-manipulation
-                disabled:opacity-50 disabled:cursor-not-allowed
-                min-w-[80px] min-h-[60px]
-                flex flex-col items-center justify-center gap-1
-              `}
-            >
-              <span className="text-2xl">{config.icon}</span>
-              <span className="text-sm">{config.label}</span>
-            </button>
-          )
+            <div key={command} className="relative">
+              {/* Button tile */}
+              <button
+                onClick={() => onAddCommand(command)}
+                disabled={disabled}
+                className={[
+                  config.color,
+                  "w-full rounded-xl px-3 py-3",
+                  "text-white font-bold",
+                  "shadow-md transition-all active:scale-95 touch-manipulation",
+                  "disabled:opacity-50 disabled:cursor-not-allowed",
+                  "min-h-[72px]",
+                  "flex flex-col items-center justify-center gap-1",
+                ].join(" ")}
+              >
+                <span className="text-2xl leading-none">{config.icon}</span>
+                <span className="text-sm leading-none">{config.label}</span>
+              </button>
+
+              {/* Info icon pinned to top-right of this tile */}
+              <div className="absolute right-1 top-1">
+                <CommandInfoHover command={command} />
+              </div>
+            </div>
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
 
-export { COMMAND_CONFIG }
+export { COMMAND_CONFIG };
