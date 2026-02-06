@@ -68,18 +68,29 @@ export function BlockTray({
               <button
                 onClick={() => onAddCommand(command)}
                 disabled={disabled}
+                draggable={!disabled}
+                onDragStart={(e) => {
+                  if (disabled) {
+                    e.preventDefault();
+                    return;
+                  }
+                  e.dataTransfer.setData("text/plain", JSON.stringify({ type: "NEW", command }));
+                  e.dataTransfer.effectAllowed = "copy";
+                  console.log("Drag start (NEW):", command);
+                }}
                 className={[
                   config.color,
                   "w-full rounded-xl px-3 py-3",
                   "text-white font-bold",
                   "shadow-md transition-all active:scale-95 touch-manipulation",
                   "disabled:opacity-50 disabled:cursor-not-allowed",
+                  "cursor-grab active:cursor-grabbing",
                   "min-h-[72px]",
                   "flex flex-col items-center justify-center gap-1",
                 ].join(" ")}
               >
-                <span className="text-2xl leading-none">{config.icon}</span>
-                <span className="text-sm leading-none">{config.label}</span>
+                <span className="text-2xl leading-none select-none">{config.icon}</span>
+                <span className="text-sm leading-none select-none">{config.label}</span>
               </button>
 
               {/* Info icon pinned to top-right of this tile */}

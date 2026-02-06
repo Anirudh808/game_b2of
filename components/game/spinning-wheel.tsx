@@ -22,36 +22,20 @@ export function SpinningWheel({ segments, onSpinEnd }: SpinningWheelProps) {
   const centerY = size / 2; // 260
   const radius = size * 0.42; // ~218 (close to your 220)
 
+  const toFixed = (num: number) => Number(num.toFixed(3));
+
   const createSegmentPath = (index: number) => {
     const startAngle = (index * segmentAngle - 90) * (Math.PI / 180);
     const endAngle = ((index + 1) * segmentAngle - 90) * (Math.PI / 180);
 
-    const x1 = centerX + radius * Math.cos(startAngle);
-    const y1 = centerY + radius * Math.sin(startAngle);
-    const x2 = centerX + radius * Math.cos(endAngle);
-    const y2 = centerY + radius * Math.sin(endAngle);
+    const x1 = toFixed(centerX + radius * Math.cos(startAngle));
+    const y1 = toFixed(centerY + radius * Math.sin(startAngle));
+    const x2 = toFixed(centerX + radius * Math.cos(endAngle));
+    const y2 = toFixed(centerY + radius * Math.sin(endAngle));
 
     const largeArcFlag = segmentAngle > 180 ? 1 : 0;
 
     return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
-  };
-
-  const getTextPosition = (index: number) => {
-    const midAngleDeg = (index + 0.5) * segmentAngle - 90; // -90 => start at top
-    const midAngleRad = midAngleDeg * (Math.PI / 180);
-
-    const textRadius = radius * 0.62;
-
-    // Radial rotation: align text along the radius (center -> outward)
-    // Keep text readable: flip 180° on the left half of the wheel
-    let rotation = midAngleDeg;
-    if (rotation > 90 && rotation < 270) rotation += 180;
-
-    return {
-      x: centerX + textRadius * Math.cos(midAngleRad),
-      y: centerY + textRadius * Math.sin(midAngleRad),
-      rotation,
-    };
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -131,17 +115,18 @@ export function SpinningWheel({ segments, onSpinEnd }: SpinningWheelProps) {
               const textRadius = radius * 0.68; // text position
               const radialGap = 12; // gap in pixels
 
-              const badgeX = centerX + badgeRadius * Math.cos(midAngleRad);
-              const badgeY = centerY + badgeRadius * Math.sin(midAngleRad);
+              const badgeX = toFixed(centerX + badgeRadius * Math.cos(midAngleRad));
+              const badgeY = toFixed(centerY + badgeRadius * Math.sin(midAngleRad));
 
               const textX =
-                centerX + (textRadius + radialGap) * Math.cos(midAngleRad);
+                toFixed(centerX + (textRadius + radialGap) * Math.cos(midAngleRad));
               const textY =
-                centerY + (textRadius + radialGap) * Math.sin(midAngleRad);
+                toFixed(centerY + (textRadius + radialGap) * Math.sin(midAngleRad));
 
               // radial rotation logic (keep upright)
               let rotationDeg = (index + 0.5) * segmentAngle - 90;
               if (rotationDeg > 90 && rotationDeg < 270) rotationDeg += 180;
+              rotationDeg = toFixed(rotationDeg);
 
               return (
                 <g key={segment.id}>

@@ -14,7 +14,7 @@ import { getPuzzleById } from "@/lib/puzzles";
 import { executeProgram, checkSuccess, getInitialState } from "@/lib/engine";
 import type { Command, ProgramBlock, RobotState } from "@/lib/types";
 
-const STEP_DELAY = 200; // ms between each step
+const STEP_DELAY = 50; // ms between each step
 
 export default function PuzzlePage() {
   const params = useParams();
@@ -51,11 +51,39 @@ export default function PuzzlePage() {
   }, [message]);
 
   // Add command to program
-  const handleAddCommand = useCallback((command: Command) => {
-    setProgram((prev) => [
-      ...prev,
-      { id: `${Date.now()}-${Math.random()}`, command },
-    ]);
+  const handleAddCommand = useCallback((command: Command, index?: number) => {
+    setProgram((prev) => {
+      const newBlock = { id: `${Date.now()}-${Math.random()}`, command };
+      if (index === undefined || index >= prev.length) {
+        return [...prev, newBlock];
+      }
+      const newProgram = [...prev];
+      newProgram.splice(index, 0, newBlock);
+      return newProgram;
+    });
+  }, []);
+
+  // Reorder command in program
+  const handleReorderCommand = useCallback((fromIndex: number, toIndex: number) => {
+    setProgram((prev) => {
+      if (
+        fromIndex < 0 ||
+        fromIndex >= prev.length ||
+        toIndex < 0 ||
+        toIndex > prev.length // Allow dropping at the end
+      ) {
+        return prev;
+      }
+      const newProgram = [...prev];
+      const [movedBlock] = newProgram.splice(fromIndex, 1);
+      
+      // If moving down, the indices shift, but splice handles removing first.
+      // However, if we drop AFTER an item, the target index might need adjustment depending on implementation.
+      // For now, assume toIndex is the insertion point in the array *after* removal.
+      
+      newProgram.splice(toIndex, 0, movedBlock);
+      return newProgram;
+    });
   }, []);
 
   // Remove command from program
@@ -239,9 +267,9 @@ export default function PuzzlePage() {
       )}
 
       {/* Main game area */}
-      <div className="flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row gap-4 max-w-7xl mx-auto">
         {/* Left: Grid and Controls */}
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="flex-1 flex flex-col gap-4 min-w-0">
           <GameGrid puzzle={puzzle} robotState={robotState} />
           <RunControls
             onRun={handleRun}
@@ -253,7 +281,7 @@ export default function PuzzlePage() {
         </div>
 
         {/* Right: Commands and Program */}
-        <div className="flex flex-col gap-4 lg:w-80">
+        <div className="flex flex-col gap-4 md:w-72 lg:w-80 flex-shrink-0">
           <BlockTray
             allowedCommands={puzzle.allowedCommands}
             onAddCommand={handleAddCommand}
@@ -265,6 +293,8 @@ export default function PuzzlePage() {
               onRemove={handleRemoveCommand}
               onMoveUp={handleMoveUp}
               onMoveDown={handleMoveDown}
+              onAddCommand={handleAddCommand}
+              onReorderCommand={handleReorderCommand}
               disabled={isRunning}
               currentStep={currentStep}
             />

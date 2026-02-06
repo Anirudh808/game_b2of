@@ -9,8 +9,10 @@ interface GameGridProps {
 
 export function GameGrid({ puzzle, robotState }: GameGridProps) {
   const { gridSize, goal, obstacles, collectibles } = puzzle
-  const cellSize = Math.min(60, Math.floor(400 / Math.max(gridSize.rows, gridSize.cols)))
-
+  
+  // Calculate aspect ratio for the grid container to match rows/cols
+  // but we can also just let the grid flow.
+  
   // Get robot rotation based on direction
   const getRotation = () => {
     switch (robotState.dir) {
@@ -53,9 +55,9 @@ export function GameGrid({ puzzle, robotState }: GameGridProps) {
   const renderObstacle = (type: string) => {
     switch (type) {
       case "rock":
-        return <span className="text-2xl">🪨</span>
+        return <span className="text-xl md:text-2xl select-none">🪨</span>
       case "water":
-        return <span className="text-2xl">💧</span>
+        return <span className="text-xl md:text-2xl select-none">💧</span>
       case "wall":
         return (
           <div className="w-full h-full bg-slate-600 rounded-sm border-2 border-slate-700" />
@@ -66,12 +68,12 @@ export function GameGrid({ puzzle, robotState }: GameGridProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-lg">
+    <div className="bg-white rounded-2xl p-4 shadow-lg w-full max-w-[500px] mx-auto overflow-hidden">
       <div
         className="grid gap-1 mx-auto"
         style={{
-          gridTemplateColumns: `repeat(${gridSize.cols}, ${cellSize}px)`,
-          gridTemplateRows: `repeat(${gridSize.rows}, ${cellSize}px)`,
+          gridTemplateColumns: `repeat(${gridSize.cols}, 1fr)`,
+          // We rely on aspect-ratio of cells to define height
         }}
       >
         {Array.from({ length: gridSize.rows }).map((_, y) =>
@@ -85,7 +87,7 @@ export function GameGrid({ puzzle, robotState }: GameGridProps) {
               <div
                 key={`${x}-${y}`}
                 className={`
-                  relative flex items-center justify-center
+                  relative flex items-center justify-center aspect-square
                   border-2 rounded-lg transition-all duration-300
                   ${
                     isGoalCell
@@ -93,11 +95,10 @@ export function GameGrid({ puzzle, robotState }: GameGridProps) {
                       : "bg-slate-50 border-slate-200"
                   }
                 `}
-                style={{ width: cellSize, height: cellSize }}
               >
                 {/* Goal flag */}
                 {isGoalCell && !hasRobot && (
-                  <span className="text-2xl absolute">🚩</span>
+                  <span className="text-xl md:text-2xl absolute select-none">🚩</span>
                 )}
 
                 {/* Obstacle */}
@@ -109,13 +110,13 @@ export function GameGrid({ puzzle, robotState }: GameGridProps) {
 
                 {/* Collectible (star) */}
                 {collectible && (
-                  <span className="text-2xl absolute animate-pulse">⭐</span>
+                  <span className="text-xl md:text-2xl absolute animate-pulse select-none">⭐</span>
                 )}
 
                 {/* Robot */}
                 {hasRobot && (
                   <div
-                    className="absolute text-3xl transition-transform duration-400"
+                    className="absolute text-2xl md:text-3xl transition-transform duration-400 select-none z-10"
                     style={{
                       transform: `rotate(${getRotation()}deg)`,
                     }}

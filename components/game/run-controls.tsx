@@ -18,7 +18,7 @@ export function RunControls({
   canRun,
 }: RunControlsProps) {
   return (
-    <div className="flex gap-4 justify-center">
+    <div className="flex gap-4 justify-center flex-wrap">
       {/* Run Button */}
       <button
         onClick={onRun}

@@ -2,6 +2,12 @@
 
 import * as React from "react";
 import type { Command } from "@/lib/types";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 type CommandDoc = {
   title: string;
@@ -79,19 +85,6 @@ const COMMAND_DOCS: Record<Command, CommandDoc> = {
   },
 };
 
-const ORDER: Command[] = [
-  "MOVE",
-  "TURN_LEFT",
-  "TURN_RIGHT",
-  "PICK_STAR",
-  "REPEAT_2",
-  "REPEAT_3",
-];
-
-function cn(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export function CommandInfoHover({
   command,
   className,
@@ -99,56 +92,44 @@ export function CommandInfoHover({
   command: Command;
   className?: string;
 }) {
-  const [open, setOpen] = React.useState(false);
-
   return (
-    <div
-      className={cn("relative inline-flex", className)}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
-      {/* (i) button */}
-      <button
-        type="button"
-        aria-label="How commands work"
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
-        className={cn(
-          "inline-flex h-5 w-5 items-center justify-center rounded-full",
-          "border bg-white text-zinc-700 shadow-sm",
-        )}
-      >
-        <span className="text-xs">i</span>
-      </button>
-
-      {/* Popover */}
-      {open && (
-        <div
-          role="dialog"
-          aria-label="Command help"
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          aria-label="How commands work"
           className={cn(
-            "absolute left-0 top-9 z-50 w-[360px] overflow-hidden rounded-2xl",
-            "border border-zinc-200 bg-white shadow-xl",
+            "inline-flex h-5 w-5 items-center justify-center rounded-full",
+            "border bg-white text-zinc-700 shadow-sm hover:bg-zinc-50",
+            className
           )}
         >
-          <div className="px-4 pt-4">
-            <div className="text-sm font-semibold text-zinc-900">
-              How Commands Work
-            </div>
-            <div className="mt-1 text-xs text-zinc-600">
-              Click a command to add it. Here’s the “mini code” for each one.
-            </div>
+          <span className="text-xs">i</span>
+        </button>
+      </PopoverTrigger>
+      {/* 
+        Responsive width: 
+        - Default (mobile): w-[90vw] or fixed but small
+        - sm+: w-[340px]
+      */}
+      <PopoverContent className="w-[300px] sm:w-[340px] p-0" side="left" align="start">
+        <div className="px-4 pt-4">
+          <div className="text-sm font-semibold text-zinc-900">
+            How Commands Work
           </div>
-
-          {/* Content */}
-          <CommandDocView cmd={command} />
-
-          <div className="border-t border-zinc-100 px-4 py-3 text-[11px] text-zinc-500">
-            Tip: Hover on a command name to preview its logic.
+          <div className="mt-1 text-xs text-zinc-600">
+            Click a command to add it. Here’s the “mini code” for each one.
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Content */}
+        <CommandDocView cmd={command} />
+
+        <div className="border-t border-zinc-100 px-4 py-3 text-[11px] text-zinc-500">
+          Tip: Tap on a command name to preview its logic.
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
 
