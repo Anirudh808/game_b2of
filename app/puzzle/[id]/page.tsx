@@ -14,7 +14,7 @@ import { getPuzzleById } from "@/lib/puzzles";
 import { executeProgram, checkSuccess, getInitialState } from "@/lib/engine";
 import type { Command, ProgramBlock, RobotState } from "@/lib/types";
 
-const STEP_DELAY = 50; // ms between each step
+const STEP_DELAY = 150; // ms between each step
 
 export default function PuzzlePage() {
   const params = useParams();
